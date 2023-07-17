@@ -34,13 +34,14 @@ public class ejercicio_01{
                 System.out.println("Mes "+contador+ ": $"+igual_v);                
             }
         }
+        
 
         if(forma ==2){
             System.out.println("------------- SUS PAGOS SERAN ------------------");
              int primero = sueldo2 / 2;
              contador = contador +1;
                 System.out.println("Mes "+contador+": $"+primero);
-            while(contador < pagos){
+            while(pagos > contador){
                 int cosa = pagos -1;
                 igual_v= primero / cosa;
                 contador = contador + 1;
@@ -53,9 +54,26 @@ public class ejercicio_01{
             int primero = sueldo2 / 2;
             while(contador < pagos){
                 contador = contador + 1;
-                int cosa = pagos -1;
+                int cosa = pagos -1 ;
                 igual_v= primero / cosa;
                 System.out.println("Mes "+contador+": $"+igual_v);
+            }
+            System.out.println("Mes "+contador+ ": $"+primero);
+        }
+ 
+
+        if(forma ==4 && pagos > contador){
+            System.out.println("------------- SUS PAGOS SERAN ------------------");
+            int primero = sueldo2 / 2;
+            segundo = primero /2;
+            contador= contador +1;
+            System.out.println("Mes "+contador+": $ "+segundo);
+            while(pagos > contador){
+                contador = contador + 1;
+                int cosa = pagos -2;
+                igual_v= segundo / cosa;
+                System.out.println("Mes "+contador+": $ "+igual_v);
+                
             }
             System.out.println("Mes "+contador+ ": $"+primero);
         }
