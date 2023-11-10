@@ -60,7 +60,7 @@ public class Principal {
                     }
                     break;
                 case 3:
-                    System.out.print("Ingrese el código del curso a ver detalle: ");
+                    System.out.print("Ingrese el codigo del curso a ver detalle: ");
                     int codigoVerDetalle = scanner.nextInt();
                     boolean encontrado = false;
                     for (int i = 0; i < numCursos; i++) {
@@ -75,7 +75,7 @@ public class Principal {
                     }
                     break;
                 case 4:
-                    System.out.print("Ingrese el código del curso a editar: ");
+                    System.out.print("Ingrese el codigo del curso a editar: ");
                     int codigoEditar = scanner.nextInt();
                     boolean encontradoEditar = false;
                     for (int i = 0; i < numCursos; i++) {
@@ -83,12 +83,12 @@ public class Principal {
                             System.out.print("Nuevo nombre: ");
                             scanner.nextLine(); 
                             String nuevoNombre = scanner.nextLine();
-                            System.out.print("Nueva área de conocimiento: ");
+                            System.out.print("Nueva area de conocimiento: ");
                             String nuevaArea = scanner.nextLine();
-                            System.out.print("Nueva duración en horas: ");
+                            System.out.print("Nueva duracion en horas: ");
                             int nuevaDuracion = scanner.nextInt();
                             cursos[i].editarInformacionCurso(nuevoNombre, nuevaArea, nuevaDuracion);
-                            System.out.println("Información del curso editada con éxito.");
+                            System.out.println("Informacion del curso editada con éxito.");
                             encontradoEditar = true;
                             break;
                         }
