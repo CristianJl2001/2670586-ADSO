@@ -43,6 +43,7 @@ class Clase {
             numTemas++;
         } else {
             System.out.println("No se pueden agregar más temas a este curso.");
+
         }
     }
 }
