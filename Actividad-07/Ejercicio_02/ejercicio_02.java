@@ -1,37 +1,48 @@
 import java.util.Scanner;
-public class ejercicio_02{
-    public static void main (String[]args){
-        Scanner  teclado = new Scanner (System.in);
 
-        System.out.println("Ingrese un numero: ");
-        int numero = teclado.nextInt();
+public class ejercicio_02 {
 
-        int impar [] = new int [numero];
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
 
-        int primo = 2;
+        System.out.print("Ingrese un número para el tamaño del arreglo: ");
+        int tamanoArreglo = scanner.nextInt();
 
-        for(int i = 0; i < numero;){
-            if(esPrimo(primo)){
-                impar[i] = primo;
-                i++;
+        if (tamanoArreglo > 0) {
+
+            int[] arregloPrimos = new int[tamanoArreglo];
+
+            int numero = 2;
+            int count = 0;
+
+            while (count < tamanoArreglo) {
+                boolean esPrimo = true;
+                for (int i = 2; i <= Math.sqrt(numero); i++) {
+                    if (numero % i == 0) {
+                        esPrimo = false;
+                        break;
+                    }
+                }
+
+                if (esPrimo) {
+                    arregloPrimos[count] = numero;
+                    count++;
+                }
+                numero++;
             }
-            primo++;
+
+            System.out.println("---------------------------------------------");
+            System.out.println("Arreglo de números primos:");
+
+            for (int i = 0; i < tamanoArreglo; i++) {
+                System.out.printf("[%03d] ", arregloPrimos[i]);
+            }
+
+            System.out.println("\n---------------------------------------------");
+        } else {
+            System.out.println("Tamaño del arreglo no válido. Por favor, ingrese un número positivo.");
         }
-        System.out.println("Los número primos son: ");
-        for (int i = 0; i < numero; i++){
-            System.out.println(impar[i]+"");
-        }
+
+        
     }
-    public static boolean esPrimo(int primo) {
-        if (primo <= 1) {
-            return false;
-        }
-        for (int i = 2; i * i <= primo; i++) {
-            if (primo % i == 0) {
-            return false;
-            }
-        }
-        return true;
-            
-    }   
 }

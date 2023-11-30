@@ -10,10 +10,11 @@ public class funcion17{
 
         int suma = 0;
 
-        while(numeros > 0){
-            int digitos % 10;
-            contador++;
+        while(numeros != 0){
+            suma += numeros % 10;
+            numeros /= 10;
+            
         }
-        return contador;
+        return suma;
     }
 }

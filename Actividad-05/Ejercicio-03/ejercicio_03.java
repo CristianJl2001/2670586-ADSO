@@ -15,8 +15,8 @@ public class ejercicio_03 {
         Random random = new Random();
 
 
-        if(numero ==0 || numero == 1 || numero ==4){
-            return false;
+        if(n == 0 || n == 1 || n ==4){
+            
            while (contador < n) {
             int numero = random.nextInt(Integer.MAX_VALUE) + 1;
            }

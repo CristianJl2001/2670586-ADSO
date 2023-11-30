@@ -24,7 +24,7 @@ public class ejercicio_04{
 
         for(int j = posicion; j >= 0; j--){
             System.out.print(arreglo [j]+ " ");
-            }
+        }
     
     }
 }

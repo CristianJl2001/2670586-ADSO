@@ -3,7 +3,7 @@ public class ejercicio_02{
     public static void main(String[]args){
         Scanner teclado = new Scanner (System.in);
 
-        System.out.println("Ingrese cantidad de notas: ");
+        System.out.println("Ingrese cantidad de materias: ");
         int cantidad_n =teclado.nextInt();
         
         double sumaC =0;

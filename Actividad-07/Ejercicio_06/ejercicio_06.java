@@ -1,50 +1,74 @@
 import java.util.Scanner;
 
 public class ejercicio_06 {
-    public static void main(String[] Args) {
-        Scanner teclado = new Scanner(System.in);
 
-        System.out.println("Ingrese el tamaño del arreglo ");
-        int tamano = teclado.nextInt();
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
 
-        int arreglo[] = new int[tamano];
+        System.out.print("Ingrese el tamaño del arreglo: ");
+        int tamanoArreglo = scanner.nextInt();
 
-        if (tamano > 0) {
-            for (int i = 0; i < tamano; i++) {
-                System.out.println("Ingrese dato en posición: [" + i + "]");
-                arreglo[i] = teclado.nextInt();
+        int[] arregloOriginal = new int[tamanoArreglo];
+
+        System.out.println("Ingrese los valores del arreglo:");
+        for (int i = 0; i < tamanoArreglo; i++) {
+            System.out.print("Valor " + (i + 1) + ": ");
+            arregloOriginal[i] = scanner.nextInt();
+        }
+
+        System.out.print("Arreglo Original: { ");
+        for (int i = 0; i < tamanoArreglo; i++) {
+            System.out.print(arregloOriginal[i]);
+            if (i < tamanoArreglo - 1) {
+                System.out.print(", ");
             }
+        }
+        System.out.println(" }");
 
-            System.out.println("Arreglo llenado por el usuario: ");
-            for (int i = 0; i < tamano; i++) {
-                System.out.println(arreglo[i]);
-            }
+        int[] arregloPrimos = new int[tamanoArreglo];
+        int[] arregloNoPrimos = new int[tamanoArreglo];
+        int countPrimos = 0;
+        int countNoPrimos = 0;
 
-            System.out.println("Los números primos son: ");
-            for (int i = 0; i < tamano; i++) {
-                if (esPrimo(arreglo[i])) {
-                    System.out.print(arreglo[i] + " ");
+        for (int i = 0; i < tamanoArreglo; i++) {
+            boolean esPrimo = true;
+            for (int j = 2; j <= Math.sqrt(arregloOriginal[i]); j++) {
+                if (arregloOriginal[i] % j == 0) {
+                    esPrimo = false;
+                    break;
                 }
             }
 
-            System.out.println("\nLos números no primos son: ");
-            for (int i = 0; i < tamano; i++) {
-                if (!esPrimo(arreglo[i])) {
-                    System.out.print(arreglo[i] + " ");
-                }
+            if (esPrimo) {
+                arregloPrimos[countPrimos] = arregloOriginal[i];
+                countPrimos++;
+            } else {
+                arregloNoPrimos[countNoPrimos] = arregloOriginal[i];
+                countNoPrimos++;
             }
         }
-    }
 
-    public static boolean esPrimo(int numero) {
-        if (numero <= 1) {
-            return false;
-        }
-        for (int i = 2; i * i <= numero; i++) {
-            if (numero % i == 0) {
-                return false;
+        System.out.print("Arreglo Primos: { ");
+        for (int i = 0; i < countPrimos; i++) {
+            System.out.print(arregloPrimos[i]);
+            if (i < countPrimos - 1) {
+                System.out.print(", ");
             }
         }
-        return true;
+        System.out.println(" }");
+
+        System.out.print("Arreglo No Primos: { ");
+        for (int i = 0; i < countNoPrimos; i++) {
+            System.out.print(arregloNoPrimos[i]);
+            if (i < countNoPrimos - 1) {
+                System.out.print(", ");
+            }
+        }
+        System.out.println(" }");
+
+        System.out.println("Longitud Arreglo Original: " + tamanoArreglo);
+        System.out.println("Longitud Arreglo Primos: " + countPrimos);
+        System.out.println("Longitud Arreglo No Primos: " + countNoPrimos);
+
     }
 }

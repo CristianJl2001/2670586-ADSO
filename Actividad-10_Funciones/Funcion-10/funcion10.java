@@ -1,4 +1,4 @@
-public class function10{
+public class funcion10{
 
     public static void main (String [] Args){
 
