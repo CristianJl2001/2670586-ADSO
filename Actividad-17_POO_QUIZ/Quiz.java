@@ -4,17 +4,21 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-public class Quiz extends JFrame{
+public class Quiz extends JFrame {
+    private JTextField campo_materia;
+    private JTextField campo_creditos;
+    private JTextField campo_notas;
+    private JLabel[] listaJLabels;
+    private JLabel etq_total;
 
-    public JLabel listaJLabels [];
-    public JLabel etq_temporal;
-
-    public Quiz (){
-        listaJLabels = new JLabel [15];     
+    public Quiz() {
+        listaJLabels = new JLabel[15];
         initComponents();
     }
+    
     public void initComponents(){
         setTitle("Promedio ponderado");
         setIconImage(getToolkit().createImage( ClassLoader.getSystemResource("imagenes/icono_promedio.png") ));
@@ -127,9 +131,8 @@ public class Quiz extends JFrame{
         contenedor.add(campo_notas, restricciones);
 
         // btn_registrar
-        JButton btn_registrar = new JButton();
-        btn_registrar.setText("REGISTRAR");
-        btn_registrar.setBackground(new Color(50,50,255));
+        JButton btn_registrar = new JButton("REGISTRAR");
+        btn_registrar.setBackground(new Color(50, 50, 255));
         btn_registrar.setForeground(Color.WHITE);
         restricciones.gridy = 2;
         restricciones.gridx = 2;
@@ -138,23 +141,23 @@ public class Quiz extends JFrame{
         restricciones.weightx = 10;
         restricciones.weighty = 1;
         restricciones.fill = GridBagConstraints.NONE;
-        restricciones.insets = new Insets (10, 10,0,0);
+        restricciones.insets = new Insets(10, 10, 0, 0);
         contenedor.add(btn_registrar, restricciones);
-        restricciones.insets = new Insets(0,0,0,0);
+        restricciones.insets = new Insets(0, 0, 0, 0);
 
         // Segundo titulo RESUMEN
         JLabel etq_titulo2 = new JLabel();
         etq_titulo2.setText("RESUMEN");
-        etq_titulo2.setFont (new Font ("Arial", Font.BOLD, 30));
+        etq_titulo2.setFont(new Font("Arial", Font.BOLD, 30));
         etq_titulo2.setHorizontalAlignment(JLabel.CENTER);
-        restricciones. gridy = 3;
+        restricciones.gridy = 3;
         restricciones.gridx = 0;
         restricciones.gridwidth = 4;
         restricciones.gridheight = 1;
         restricciones.weightx = 100;
         restricciones.weighty = 1;
         restricciones.fill = GridBagConstraints.BOTH;
-        restricciones.insets = new Insets (20, 0,0,0);
+        restricciones.insets = new Insets(20, 0, 0, 0);
         contenedor.add(etq_titulo2, restricciones);
 
         // Scroll
@@ -175,19 +178,19 @@ public class Quiz extends JFrame{
         contenedor.add(scrollPane, restricciones);
 
         GridBagConstraints constItems = new GridBagConstraints();
-        
+
         Border borderColor = BorderFactory.createMatteBorder(0, 0, 1, 0, Color.decode("#D5D5D5"));
-        Border borderPadding = new EmptyBorder(3,10,3,20);
+        Border borderPadding = new EmptyBorder(3, 10, 3, 20);
         Border borderGris = new CompoundBorder(borderColor, borderPadding);
-        
+
         // Tabla
-        for (int i=0; i<this.listaJLabels.length; i++) {
+       for (int i = 0; i < this.listaJLabels.length; i++) {
             JLabel etq_temporal = new JLabel(" ");
-            etq_temporal.setHorizontalAlignment( JLabel.RIGHT );
-            etq_temporal.setFont( new Font("Arial", Font.PLAIN, 18) );
+            etq_temporal.setHorizontalAlignment(JLabel.RIGHT);
+            etq_temporal.setFont(new Font("Arial", Font.PLAIN, 18));
             etq_temporal.setOpaque(true);
-            etq_temporal.setBackground( Color.white );
-            etq_temporal.setBorder( borderGris );
+            etq_temporal.setBackground(Color.white);
+            etq_temporal.setBorder(borderGris);
             this.listaJLabels[i] = etq_temporal;
             constItems.gridy = i;
             constItems.gridx = 0;
@@ -220,7 +223,7 @@ public class Quiz extends JFrame{
 
         JButton btn_limpiar = new JButton();
         btn_limpiar.setText("LIMPIAR");
-        btn_limpiar.setBackground(new Color(255,0,0));
+        btn_limpiar.setBackground(new Color(255, 0, 0));
         btn_limpiar.setForeground(Color.WHITE);
         restricciones.gridx = 0;
         restricciones.gridy = 5;
@@ -247,53 +250,59 @@ public class Quiz extends JFrame{
 
                 
 
-                for(int i = 1; i <= creditos; i++){
-                    texto += etq_materia+" -> Creditos "+ "Nota "+valor_nota;
+                // ActionListener para el botón REGISTRAR
+                btn_registrar.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        // Lógica para registrar los datos y actualizar la tabla
+                        double creditos = Double.parseDouble(campo_creditos.getText());
+                        double notas = Double.parseDouble(campo_notas.getText());
 
-                    for(int j = 1; j <=creditos; i++){
-                        acumulador = acumulador + valor_nota / i;
+                        double valor_nota = (notas * creditos) / creditos;
 
-                        total += acumulador;
-                    }
-                    texto += "</html>";
-                    total += "</html>";
-                    
+                        String texto = "<html>";
+                        String total = "<html>";
 
+                        for (int i = 1; i <= creditos; i++) {
+                            texto += campo_materia.getText() + " -> Creditos " + "Nota " + valor_nota;
 
+                            for (int j = 1; j <= creditos; j++) {
+                                acumulador = acumulador + valor_nota / j;
 
-                }
-                etq_temporal.setText(texto);
-                etq_total.setText(total);
-            }
-        };
-        btn_registrar.addActionListener(calcular);
-
-        ActionListener evento_limpiar = new ActionListener(){
-            public void actionPerformed(ActionEvent event){
-                System.out.println("Clic en LIMPIAR");
-            }
-        };
-
-        btn_limpiar.addActionListener(evento_limpiar);
-
-
-
-
-
-
-
-
-
-
-        add(contenedor);
-        setVisible(true);
-        revalidate();
-
-
-
-
-
+                                total += acumulador;
+                            }
+                            texto += "</html>";
+                            total += "</html>";
+                        }
+                        listaJLabels[0].setText(texto);
+                        etq_total.setText(total);
+                    }    
+                });
 
         
+
+                // ActionListener para el botón LIMPIAR
+        
+                btn_limpiar.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        // Lógica para limpiar los campos y la tabla
+                        campo_materia.setText("");
+                        campo_creditos.setText("");
+                        campo_notas.setText("");
+
+                        for (int i = 0; i < listaJLabels.length; i++) {
+                            listaJLabels[i].setText("");
+                        }
+                        etq_total.setText("Total: $ 0");
+                    }
+                });
+            });
+
+            add(contenedor);
+            setVisible(true);
+            revalidate();
+        }
     }
 }
+
