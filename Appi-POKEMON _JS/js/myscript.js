@@ -53,11 +53,11 @@ function cargarDetalle(endpoint) {
     fetch(endpoint)
         .then(res => res.json())
         .then(data => {
-            // Aquí actualizas la imagen del Pokémon con los datos obtenidos
+            
             document.getElementById('imgPokemon').src = data.sprites.front_default;
         })
         .catch(error => {
-            // Si hay un error (como falta de conexión), muestra el GIF de carga
+            
             console.error("Error al cargar los datos:", error);
             mostrarGifCarga();
         });
