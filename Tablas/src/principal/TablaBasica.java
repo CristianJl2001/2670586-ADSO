@@ -319,12 +319,7 @@ public class TablaBasica extends javax.swing.JFrame {
         }
 
         // Verificar si el documento o correo ya existen
-        for (int i = 0; i < listaPersonas.length; i++) {
-            if (documento.equals(listaPersonas[i].getDocumento()) || correo.equals(listaPersonas[i].getCorreo())) {
-                AlertaV2 ventana = new AlertaV2("Usuario ya existente");
-                break;
-            }
-        }
+        
     
 
 
