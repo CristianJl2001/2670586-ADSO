@@ -7,6 +7,7 @@ window.onload = function () {
     contentPrincipal = document.getElementById("contentPrincipal");
     contenedorPokemones = document.getElementById("contenedorPokemones");
     imgPokemon = document.getElementById("imgPokemon");
+    nombrePokemon = document.getElementById("nombrePokemon")
 };
 
 function verificarConexion() {
@@ -24,19 +25,16 @@ function mostrarGifCarga() {
 }
 function consumoAPI(){
     let endpoint = "https://pokeapi.co/api/v2/pokemon";
-    
-    
-    
     // Consumo - AJAX
     fetch(endpoint)
     .then(res => res.json())
     .then(data => {
-        //Codigo para ejecutar en caso de tener el JSON como respuesta de la API 
+        
         contentPrincipal.innerHTML ="";
          for(var i = 0; i < data.results.length; i++){
             
             let html_temporal = 
-            `<div  class="btn-group btn-group-sm" role="group" aria-label="Small button group">
+            `<div  class="">
                 <button type="button" class="btn btn-outline-dark" onclick="cargarDetalle('${data.results[i].url}')">${data.results[i].name}</button>
             </div>`
 
@@ -54,7 +52,8 @@ function cargarDetalle(endpoint) {
         .then(res => res.json())
         .then(data => {
             
-            document.getElementById('imgPokemon').src = data.sprites.front_default;
+            document.getElementById('imgPokemon').src = data.sprites.other.dream_world.front_default;
+            nombrePokemon.innerText = data.name;
         })
         .catch(error => {
             
@@ -90,7 +89,7 @@ function btn_principio(){
 
 function btn_siguiente() {
     if (verificarConexion()) {
-        // Hay conexión a Internet, realiza la solicitud para cargar los datos
+        // Relaiza conexion de internet y carga los datos
         offset += limit;
         let endpoint_next = `https://pokeapi.co/api/v2/pokemon?offset=${offset}&limit=${limit}`;
 
@@ -109,7 +108,8 @@ function btn_siguiente() {
                 }
             });
     } else {
-        // No hay conexión a Internet, muestra el GIF de carga
+        // GIF carga
+        alert ("No hay conexion a internet ")
         mostrarGifCarga();
     }
 }
@@ -135,4 +135,3 @@ function btn_atras() {
         });
     }
 }
-// Botones de siguiente y atras. ademas del gif de cargar
