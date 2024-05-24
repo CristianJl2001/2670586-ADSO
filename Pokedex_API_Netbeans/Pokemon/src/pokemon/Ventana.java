@@ -1,44 +1,114 @@
-
 package pokemon;
 
 import java.awt.Image;
 import javax.swing.ImageIcon;
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 import javax.swing.table.DefaultTableModel;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import javax.swing.DefaultListModel;
+import pokemon.Utils.ConsumoAPI;
 
 public class Ventana extends javax.swing.JFrame {
     DefaultTableModel model;
+    ConsumoAPI consumo;
+
     public Ventana() {
         initComponents();
         InitAlternComponents();
+        consumo = new ConsumoAPI(); 
+        imprimir_Lista();
     }
-    
-    public void InitAlternComponents(){
-        
+
+    public void InitAlternComponents() {
         setVisible(true);
         model = (DefaultTableModel) Lista.getModel();
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setResizable(false);
-        
+
         String imagePath = "/Imagenes/siguiente.png";
-        
         ImageIcon originalIcon = new ImageIcon(getClass().getResource(imagePath));
-        
         Image originalImage = originalIcon.getImage();
         Image resizedImage = originalImage.getScaledInstance(btn_siguiente.getWidth(), btn_siguiente.getHeight(), Image.SCALE_SMOOTH);
-        
         ImageIcon resizedIcon = new ImageIcon(resizedImage);
-
         btn_siguiente.setIcon(resizedIcon);
-        //-----------------------------------------------------------------------
+
         String imagenAtras = "/Imagenes/atras.png";
         ImageIcon originalAtrasIcon = new ImageIcon(getClass().getResource(imagenAtras));
         Image originalAtrasImage = originalAtrasIcon.getImage();
         Image resizedAtrasImage = originalAtrasImage.getScaledInstance(btn_atras.getWidth(), btn_atras.getHeight(), Image.SCALE_SMOOTH);
         ImageIcon resizedAtrasIcon = new ImageIcon(resizedAtrasImage);
         btn_atras.setIcon(resizedAtrasIcon);
+        
+        Lista.getColumnModel().getColumn(0).setPreferredWidth(50);
+        Lista.getColumnModel().getColumn(1).setPreferredWidth(200);
+        Lista.getColumnModel().getColumn(2).setPreferredWidth(200);
     }
+   
+    //Imprimir Lista
+   public void imprimir_Lista() {
+        String respuesta = consumo.consumoGET("https://pokeapi.co/api/v2/pokemon?limit=20");  // Actualiza la URL si es necesario
+        JsonObject jsonObject = JsonParser.parseString(respuesta).getAsJsonObject();
+        JsonArray registros = jsonObject.getAsJsonArray("results");
+    
+        DefaultListModel<String> listModel = new DefaultListModel<>();
+    
+        for (int i = 0; i < registros.size(); i++) {
+            JsonObject temp = registros.get(i).getAsJsonObject();
+            String nombre = temp.get("name").getAsString();
+            String url = temp.get("url").getAsString();
+            listModel.addElement(nombre);
+
+            
+            String[] detalles = obtenerDetallesPokemon(url);
+            String habilidades = detalles[0];
+            String imagenUrl = detalles[1];
+            
+            
+            model.addRow(new Object[]{nombre, habilidades, url});
+        }
+    
+        List.setModel(listModel);
+    }
+    
+    private String[] obtenerDetallesPokemon(String url) {
+        String habilidades = "";
+        String imagenUrl = "";
+        try {
+            String detallePokemon = consumo.consumoGET(url);
+            JsonObject detalleJson = JsonParser.parseString(detallePokemon).getAsJsonObject();
+            JsonArray habilidadesArray = detalleJson.getAsJsonArray("abilities");
+            JsonObject sprites = detalleJson.getAsJsonObject("sprites");
+            imagenUrl = sprites.get("front_default").getAsString();  
+
+            StringBuilder habilidadesBuilder = new StringBuilder();
+            for (int j = 0; j < habilidadesArray.size(); j++) {
+                JsonObject habilidadObj = habilidadesArray.get(j).getAsJsonObject();
+                JsonObject habilidad = habilidadObj.getAsJsonObject("ability");
+                String nombreHabilidad = habilidad.get("name").getAsString();
+                habilidadesBuilder.append(nombreHabilidad);
+                if (j < habilidadesArray.size() - 1) {
+                    habilidadesBuilder.append(", ");
+                }
+            }
+            habilidades = habilidadesBuilder.toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new String[]{habilidades, imagenUrl};
+    }
+   
+    //Imagen
+    private void mostrarImagen(String pokemon) {
+        ImageIcon icono = new ImageIcon("ruta/de/la/imagen/" + pokemon + ".png");
+        Image imagen = icono.getImage().getScaledInstance(150, 150, Image.SCALE_DEFAULT);
+        ImageIcon iconoEscalado = new ImageIcon(imagen); // Convierte la imagen escalada en un ImageIcon
+        etq_pokemon.setIcon(iconoEscalado);
+    }
+
+    
 
     
     @SuppressWarnings("unchecked")
@@ -99,6 +169,7 @@ public class Ventana extends javax.swing.JFrame {
         });
         Tabla_Pokemon.setViewportView(Lista);
 
+        etq_pokemon.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         etq_pokemon.setText("etq_imagen");
 
         btn_siguiente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/siguiente.png"))); // NOI18N
@@ -178,7 +249,7 @@ public class Ventana extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_siguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_siguienteActionPerformed
-        // TODO add your handling code here:
+        
     }//GEN-LAST:event_btn_siguienteActionPerformed
 
     
