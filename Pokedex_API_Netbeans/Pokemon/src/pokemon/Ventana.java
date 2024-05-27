@@ -12,13 +12,17 @@ import pokemon.Utils.ConsumoAPI;
 
 public class Ventana extends javax.swing.JFrame {
     DefaultTableModel model;
+    JsonObject pokemon;
     ConsumoAPI consumo;
 
     public Ventana() {
         initComponents();
         InitAlternComponents();
         consumo = new ConsumoAPI(); 
+        imprimir_List();
         imprimir_Lista();
+        
+        
     }
 
     public void InitAlternComponents() {
@@ -47,19 +51,36 @@ public class Ventana extends javax.swing.JFrame {
         Lista.getColumnModel().getColumn(2).setPreferredWidth(200);
     }
    
-    //Imprimir Lista
-   public void imprimir_Lista() {
-        String respuesta = consumo.consumoGET("https://pokeapi.co/api/v2/pokemon?limit=20");  // Actualiza la URL si es necesario
+    //Imprimir Lista Vertical
+   public void imprimir_List() {
+        String respuesta = consumo.consumoGET("https://pokeapi.co/api/v2/pokemon?limit=20");  
         JsonObject jsonObject = JsonParser.parseString(respuesta).getAsJsonObject();
-        JsonArray registros = jsonObject.getAsJsonArray("results");
+        JsonArray results = jsonObject.getAsJsonArray("results");
     
         DefaultListModel<String> listModel = new DefaultListModel<>();
-    
-        for (int i = 0; i < registros.size(); i++) {
-            JsonObject temp = registros.get(i).getAsJsonObject();
+        
+        for(int i = 0; i < results.size(); i++){
+            JsonObject temp = results.get(i).getAsJsonObject();
             String nombre = temp.get("name").getAsString();
-            String url = temp.get("url").getAsString();
             listModel.addElement(nombre);
+        }
+    
+        List.setModel(listModel);
+    }
+    
+    //Imprimir Tabla Lista
+   public void imprimir_Lista(){
+        String respuesta = consumo.consumoGET("https://pokeapi.co/api/v2/pokemon/1/");  
+        JsonObject jsonObject = JsonParser.parseString(respuesta).getAsJsonObject();
+        JsonArray habilidad = this.pokemon.getAsJsonArray("abilities");
+    
+        DefaultListModel<String> listModel = new DefaultListModel<>();
+        for (int i = 0; i < habilidad.size(); i++) {
+            int j = 1;
+            JsonObject temp = habilidad.get(i).getAsJsonObject();
+            String ability = temp.get("name").getAsString();
+            String url = temp.get("url").getAsString();
+            listModel.addElement(ability);
 
             
             String[] detalles = obtenerDetallesPokemon(url);
@@ -67,13 +88,15 @@ public class Ventana extends javax.swing.JFrame {
             String imagenUrl = detalles[1];
             
             
-            model.addRow(new Object[]{nombre, habilidades, url});
+            
+            model.addRow(new Object[]{j, habilidades, url});
+            j++;
+            System.out.println("Hola mundo");
         }
-    
-        List.setModel(listModel);
+        
     }
-    
-    private String[] obtenerDetallesPokemon(String url) {
+   
+    public String[] obtenerDetallesPokemon(String url) {
         String habilidades = "";
         String imagenUrl = "";
         try {
@@ -86,7 +109,7 @@ public class Ventana extends javax.swing.JFrame {
             StringBuilder habilidadesBuilder = new StringBuilder();
             for (int j = 0; j < habilidadesArray.size(); j++) {
                 JsonObject habilidadObj = habilidadesArray.get(j).getAsJsonObject();
-                JsonObject habilidad = habilidadObj.getAsJsonObject("ability");
+                JsonObject habilidad = habilidadObj.getAsJsonObject("abilities");
                 String nombreHabilidad = habilidad.get("name").getAsString();
                 habilidadesBuilder.append(nombreHabilidad);
                 if (j < habilidadesArray.size() - 1) {
@@ -97,9 +120,12 @@ public class Ventana extends javax.swing.JFrame {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return new String[]{habilidades, imagenUrl};
+        return new String[]{habilidades};
     }
    
+    
+    
+    
     //Imagen
     private void mostrarImagen(String pokemon) {
         ImageIcon icono = new ImageIcon("ruta/de/la/imagen/" + pokemon + ".png");
@@ -143,10 +169,7 @@ public class Ventana extends javax.swing.JFrame {
 
         Lista.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+
             },
             new String [] {
                 "N", "HABILIDAD", "URL"
@@ -193,22 +216,20 @@ public class Ventana extends javax.swing.JFrame {
             Panel_ContenedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(Panel_ContenedorLayout.createSequentialGroup()
                 .addContainerGap(51, Short.MAX_VALUE)
+                .addComponent(List_Pokemones, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addGroup(Panel_ContenedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, Panel_ContenedorLayout.createSequentialGroup()
-                        .addComponent(List_Pokemones, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Tabla_Pokemon, javax.swing.GroupLayout.PREFERRED_SIZE, 498, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(Panel_ContenedorLayout.createSequentialGroup()
+                        .addComponent(btn_atras, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addGroup(Panel_ContenedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(etq_text, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(Panel_ContenedorLayout.createSequentialGroup()
-                                .addComponent(btn_atras, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
                                 .addComponent(etq_pokemon, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(btn_siguiente, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(Tabla_Pokemon, javax.swing.GroupLayout.PREFERRED_SIZE, 498, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(52, 52, 52))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, Panel_ContenedorLayout.createSequentialGroup()
-                        .addComponent(etq_text, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(234, 234, 234))))
+                                .addComponent(btn_siguiente, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addGap(52, 52, 52))
         );
         Panel_ContenedorLayout.setVerticalGroup(
             Panel_ContenedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
